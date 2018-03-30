@@ -42,13 +42,11 @@ public class MathString {
 				innerGroup = getInnerGroup("(" + equation); //We have to add the parenthesis back to complete our inner group
 				equation = equation.substring(innerGroup.length() + 1);	//Cut off inner group
 				nextOp = getNextOp(equation);				//Any time we modify our equation we have to get the next operator
-				System.out.println("inner group: " + innerGroup);
 				
 				//Solve the inner group (recursion) and add it to the operation stack
 				operationStack.push(Double.toString(eval(innerGroup)));
 			}
 			
-			System.out.println("Last Op: " + lastOp + ", Next Op: " + nextOp);
 			//Solve what we have			//If the next op is less important than the last op, and the last added string is not an operator
 			while (operationStack.size() >= 3 && (getOpOrder(nextOp) <= getOpOrder(lastOp)) && !isOperator(operationStack.peek()))
 			{
@@ -60,7 +58,6 @@ public class MathString {
 				operationStack.push(Double.toString(simpleEval(left, right, op)));
 				nextOp = getNextOp(equation);
 			}
-			System.out.println(operationStack);
 		}
 		
 		
@@ -146,10 +143,6 @@ public class MathString {
 					valid |= (currentOp == '-' && lastOp != '-');	//Could be a negative sign. This is okay. Double negatives are not okay
 					valid |= (currentOp == '(');	//You can have another operator before a set of parenthesis
 					valid |= (lastOp == ')');		//You can have another operator after a set of parenthesis
-
-					System.out.println(operatorsInARow + " operators in a row");
-					System.out.println("Current operator: " + currentOp);
-					System.out.println("Last operator: " + lastOp);
 				}
 				
 				lastOp = currentOp;
@@ -206,7 +199,6 @@ public class MathString {
 				i++;
 			}
 		}
-		System.out.println("Next part: " + next);
 		return next;
 	}
 	
