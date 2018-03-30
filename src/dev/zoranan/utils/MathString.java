@@ -7,26 +7,36 @@ public class MathString {
 	private static final char[] operators = {'+', '-', '/', '*', '^', '(', ')'};
 	private static Stack<String> operationStack;
 	
+	/*
+	 * This is the main evaluation function. 
+	 */
 	public static double eval(String equation)
 	{	
 		operationStack = new Stack<String>();
 		equation = equation.replaceAll("\\s", "");
-		String next, right, op, left;
+		String next, right, op, left, nextOp, lastOp = "";
 		
 		while (equation.length() > 0)
 		{
+			//Get the next piece of the equation, and add it to the stack.
 			next = getNext(equation);
 			equation = equation.substring(next.length());	//Cut off the part we just separated
 			operationStack.push(next);	//Add the next part of the equation
 			
-			//Solve what we have
-			//if (operationStack.size() >= 3 && !(isOperator(next.charAt(0)) && next.length() == 1));
-			if (operationStack.size() >= 3)
+			//Store the next and last operator for PEMDAS (We dont remove this from the equation string, this is a 'peek' ahead)
+			nextOp = getNextOp(equation);
+			if (isOperator(next))
+				lastOp = next;
+			
+			//Solve what we have			//If the next op is less important than the last op, and the last added string is not an operator
+			while (operationStack.size() >= 3 && (getOpOrder(nextOp) <= getOpOrder(lastOp)) && !isOperator(operationStack.peek()))
 			{
 				right = operationStack.pop();
 				op = operationStack.pop();
 				left = operationStack.pop();
 				operationStack.push(Double.toString(simpleEval(left, right, op)));
+				
+				nextOp = getNextOp(equation);
 			}
 			//Push the answer to the stack
 		}
@@ -123,27 +133,48 @@ public class MathString {
 	}
 	
 	//This function gets the next number or operator in our equation
-	public static String getNext(String equation)
+	private static String getNext(String equation)
 	{
 		String next = "";
 		int i = 0;
-			
+		boolean lastPartWasOp;	
+		
 		if (isOperator(equation.charAt(0)))
 		{
 			next = equation.substring(0, 1);
-			i = 1;
+			i = 1; //We may need to append more to 'next' if next is a '-', so look past it
 		}
 		
-		if (next.isEmpty() || next.equals("-"))
+		lastPartWasOp = (operationStack.isEmpty()) || isOperator(operationStack.peek());
+		
+		if (next.isEmpty() || (next.equals("-") && lastPartWasOp))	//Only continue on if 'next' is empty, or if 'next' is a '-'
 		{
+			//Continue adding characters to 'next' until we run out of characters, or the character is an operator
 			while (i < equation.length() && !isOperator(equation.charAt(i)))
 			{
 				next += equation.charAt(i);
 				i++;
 			}
 		}
-		
+		System.out.println("Next part: " + next);
 		return next;
+	}
+	
+	//Get next operator (Used to implement PEMDAS)
+	private static String getNextOp(String equation)
+	{
+		char c = 0;
+		for (int i = 0; i < equation.length(); i++)
+		{
+			c = equation.charAt(i);
+			
+			if (isOperator(c))
+				break;
+		}
+		if (c == 0)
+			return ("");
+		else
+			return (Character.toString(c));
 	}
 	
 	//Break the whole string down into numbers and operators
@@ -186,5 +217,24 @@ public class MathString {
 			valid |= (operators[i] == c);
 		}
 		return valid;
+	}
+	
+	private static boolean isOperator(String s)
+	{
+		return (s.length() == 1) && isOperator(s.charAt(0));
+	}
+	
+	//Gets the order that an operation should be done in
+	private static int getOpOrder(String op)
+	{
+		int order = -1;
+		if (op.equals("+") || op.equals("-"))
+			order = 1;
+		else if (op.equals("*") || op.equals("/"))
+			order = 2;
+		else if (op.equals("^"))
+			order = 3;
+		
+		return order;
 	}
 }

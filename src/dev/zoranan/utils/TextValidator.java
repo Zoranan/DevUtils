@@ -21,9 +21,20 @@ public class TextValidator {
 		return (c < '0' || c > '9');
 	}
 	
+	//Check for a numeric character
+	public static boolean isNotNumericDecimal(char c)
+	{
+		return (isNotNumeric(c) && c != '.');
+	}
+	
 	public static boolean isNumeric(char c)
 	{
 		return (!isNotNumeric(c));
+	}
+	
+	public static boolean isNumericDecimal(char c)
+	{
+		return (!isNotNumericDecimal(c));
 	}
 	
 	//Check for alpha numeric
@@ -45,6 +56,18 @@ public class TextValidator {
 		for (int i = 0; i < s.length() && valid; i ++)
 		{
 			valid &= isNumeric(s.charAt(i));
+		}
+		
+		return valid;
+	}
+	
+	public static boolean isNumericDecimal (String s)
+	{
+		boolean valid = true;
+		
+		for (int i = 0; i < s.length() && valid; i ++)
+		{
+			valid &= isNumericDecimal(s.charAt(i));
 		}
 		
 		return valid;
