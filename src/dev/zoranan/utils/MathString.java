@@ -5,43 +5,93 @@ import java.util.Stack;
 
 public class MathString {
 	private static final char[] operators = {'+', '-', '/', '*', '^', '(', ')'};
-	private static Stack<String> operationStack;
+	//private static Stack<String> operationStack;
 	
 	/*
 	 * This is the main evaluation function. 
 	 */
 	public static double eval(String equation)
 	{	
-		operationStack = new Stack<String>();
+		Stack<String> operationStack = new Stack<String>();
 		equation = equation.replaceAll("\\s", "");
-		String next, right, op, left, nextOp, lastOp = "";
+		String next, right, op, left, nextOp, lastOp = "", innerGroup;
 		
 		while (equation.length() > 0)
 		{
 			//Get the next piece of the equation, and add it to the stack.
-			next = getNext(equation);
+			next = getNext(equation, operationStack);
 			equation = equation.substring(next.length());	//Cut off the part we just separated
 			operationStack.push(next);	//Add the next part of the equation
 			
 			//Store the next and last operator for PEMDAS (We dont remove this from the equation string, this is a 'peek' ahead)
 			nextOp = getNextOp(equation);
-			if (isOperator(next))
+			if (isOperator(next) && !next.equals("("))	//We dont need to track parenthesis
 				lastOp = next;
 			
+			if (operationStack.peek().equals("("))	//If we have started an inner group
+			{
+				operationStack.pop();//Remove the parenthesis
+				if (!operationStack.isEmpty() && !isOperator(operationStack.peek()))//If we had a number against our parenthesis, its multiplication
+				{
+					operationStack.push("*");	//Add the multiplication to our operation stack
+					lastOp = "*";
+				}
+				
+				//lastOp = operationStack.peek();
+				
+				innerGroup = getInnerGroup("(" + equation); //We have to add the parenthesis back to complete our inner group
+				equation = equation.substring(innerGroup.length() + 1);	//Cut off inner group
+				nextOp = getNextOp(equation);				//Any time we modify our equation we have to get the next operator
+				System.out.println("inner group: " + innerGroup);
+				
+				//Solve the inner group (recursion) and add it to the operation stack
+				operationStack.push(Double.toString(eval(innerGroup)));
+			}
+			
+			System.out.println("Last Op: " + lastOp + ", Next Op: " + nextOp);
 			//Solve what we have			//If the next op is less important than the last op, and the last added string is not an operator
 			while (operationStack.size() >= 3 && (getOpOrder(nextOp) <= getOpOrder(lastOp)) && !isOperator(operationStack.peek()))
 			{
 				right = operationStack.pop();
 				op = operationStack.pop();
 				left = operationStack.pop();
-				operationStack.push(Double.toString(simpleEval(left, right, op)));
 				
+				//Push the answer to the stack
+				operationStack.push(Double.toString(simpleEval(left, right, op)));
 				nextOp = getNextOp(equation);
 			}
-			//Push the answer to the stack
+			System.out.println(operationStack);
 		}
 		
+		
 		return Double.parseDouble(operationStack.pop());	//At this point there should only be one object left in the stack
+	}
+	
+	//Gets a parenthesis set from within the equation, one level deep
+	private static String getInnerGroup(String equation)
+	{
+		String inner = "";
+		int parenthesisCount = 0;
+		int start = -1;
+		char c;
+		
+		for (int i=0; i < equation.length() && inner.isEmpty(); i++)
+		{
+			c = equation.charAt(i);
+			if (c == '(')
+			{
+				if (start == -1)
+					start = i+1;
+				parenthesisCount++;
+			}
+			else if (c == ')')
+				parenthesisCount--;
+			
+			if (start != -1 && parenthesisCount == 0)
+				inner = equation.substring(start, i);
+		}
+		
+		return inner;
 	}
 	
 	//Evaluate simple equations that consist of 2 numbers and an operator
@@ -133,7 +183,7 @@ public class MathString {
 	}
 	
 	//This function gets the next number or operator in our equation
-	private static String getNext(String equation)
+	private static String getNext(String equation, Stack<String> operationStack)
 	{
 		String next = "";
 		int i = 0;
