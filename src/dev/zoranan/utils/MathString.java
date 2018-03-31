@@ -37,14 +37,19 @@ public class MathString {
 					lastOp = "*";
 				}
 				
-				//lastOp = operationStack.peek();
-				
 				innerGroup = getInnerGroup("(" + equation); //We have to add the parenthesis back to complete our inner group
 				equation = equation.substring(innerGroup.length() + 1);	//Cut off inner group
 				nextOp = getNextOp(equation);				//Any time we modify our equation we have to get the next operator
 				
 				//Solve the inner group (recursion) and add it to the operation stack
 				operationStack.push(Double.toString(eval(innerGroup)));
+				
+				//Check if we need to add a multiplication operator
+				if (!isOperator(getNext(equation, operationStack)))
+				{
+					operationStack.push("*");	//Add the multiplication to our operation stack
+					lastOp = "*";
+				}
 			}
 			
 			//Solve what we have			//If the next op is less important than the last op, and the last added string is not an operator
@@ -219,38 +224,8 @@ public class MathString {
 			return (Character.toString(c));
 	}
 	
-	//Break the whole string down into numbers and operators
-	private static ArrayList<String> getParts(String equation)
-	{
-		equation = TextValidator.eatChars(equation, ' ');
-		ArrayList<String> parts = new ArrayList<String>();
-		String currentPart = "";
-		
-		for (int i = 0; i < equation.length(); i++)
-		{
-			char c = equation.charAt(i);
-			//if the current character is a digit, concat it to the current part of the equation
-			if (TextValidator.isNumeric(c))
-			{
-				currentPart += c;
-			}
-			//If we have an operator, add it to the list
-			else if (isOperator(c))
-			{
-				currentPart = "";
-				parts.add("" + c);
-			}
-			
-			//Add the new part
-			else if (!currentPart.isEmpty())
-				parts.add(currentPart);
-		}
-		
-		return parts;
-	}
-	
 	//Determines if the passed in character is a valid math operator
-	private static boolean isOperator(char c)
+	public static boolean isOperator(char c)
 	{
 		Boolean valid = false;
 		//Break if the character is determined to be an operator
@@ -261,12 +236,13 @@ public class MathString {
 		return valid;
 	}
 	
-	private static boolean isOperator(String s)
+	public static boolean isOperator(String s)
 	{
 		return (s.length() == 1) && isOperator(s.charAt(0));
 	}
 	
 	//Gets the order that an operation should be done in
+	//The higher the number, the more important an operation is
 	private static int getOpOrder(String op)
 	{
 		int order = -1;
