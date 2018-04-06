@@ -1,4 +1,4 @@
-package dev.zoranan.utils;
+package dev.zoranan.utils.mathString;
 
 import java.util.ArrayList;
 import java.util.Stack;
