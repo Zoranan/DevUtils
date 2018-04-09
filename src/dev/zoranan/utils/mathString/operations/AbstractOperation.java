@@ -20,7 +20,7 @@ public abstract class AbstractOperation {
 	 * Attempts to set a variable of the given name, to the given value
 	 * @param name  The name of the variable to set
 	 * @param value The desired value of the variable
-	 * @return A boolean indicating if the variable was found, and the value was set
+	 * @return True if the variable exists in this equation, or false if it does not.
 	 * @throws VariableException if the variable name is invalid (contains spaces, or has no alpha characters)
 	 */
 	public abstract boolean setVariable (String name, double value);

@@ -1,14 +1,9 @@
 package dev.zoranan.utils.mathString;
 
-import java.util.LinkedList;
 import java.util.Stack;
-
-import dev.zoranan.utils.mathString.operations.*;
-import dev.zoranan.utils.tokenizer.Token;
 
 public class MathString {
 	private static final char[] operators = {'+', '-', '/', '*', '^', '(', ')'};
-	private static MathTokenizer tokenizer = new MathTokenizer();
 	
 	/*
 	 * This is the main evaluation function. 
@@ -70,42 +65,7 @@ public class MathString {
 		
 		
 		return Double.parseDouble(operationStack.pop());	//At this point there should only be one object left in the stack
-	}
-	
-	public static void compileEquation(String eq)
-	{
-		tokenizer.tokenize(eq);
-		LinkedList<Token> equation = tokenizer.getTokens();
-		Stack<Token> operationStack = new Stack<Token>();
-		
-		Token currentToken, nextToken, previousToken;
-		AbstractOperation previousOperation;
-		AbstractOperation currentOperation;
-		
-		//Cycle through each token, and add it to the stack
-		for (int i = 1; i < equation.size()-1; i++)
-		{
-			previousToken = equation.get(i-1);
-			currentToken = equation.get(i);
-			nextToken = equation.get(i+1);
-			
-			//BINARY OPERATIONS
-			//If this is a binary operation, the current token will be a binary operator
-			if (currentToken.tokenCode <= MathTokenizer.EXPONENT && currentToken.tokenCode >= MathTokenizer.ADD_SUB)
-			{			
-				
-			}
-			
-		}
-		
-		
-		
-		
-		for (Token t : equation)
-		{
-			System.out.println(t);
-		}
-	}
+	}	
 	
 	//Gets a parenthesis set from within the equation, one level deep
 	private static String getInnerGroup(String equation)

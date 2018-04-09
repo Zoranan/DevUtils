@@ -2,8 +2,12 @@ package dev.zoranan.utils.mathString;
 
 import dev.zoranan.utils.tokenizer.Tokenizer;
 
+/**A customized {@link Tokenizer} set up to Tokenize math equations.
+ * @author Will
+ */
 public class MathTokenizer extends Tokenizer{
 	
+	//All of our possible token codes, in order of priority (higher numbers are a higher priority)
 	public final static int TRIG_FUNC = 1;
 	public final static int OPEN_PAR = 2;
 	public final static int CLOSE_PAR = 3;
@@ -13,6 +17,9 @@ public class MathTokenizer extends Tokenizer{
 	public final static int NUMBER = 7;
 	public final static int VARIABLE = 8;
 	
+	/**Create a new MathTokenizer
+	 * 
+	 */
 	public MathTokenizer ()
 	{
 		super();

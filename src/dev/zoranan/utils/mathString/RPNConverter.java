@@ -6,9 +6,17 @@ import java.util.Stack;
 
 import dev.zoranan.utils.tokenizer.Token;
 
-public class RPNConverter {
+/**Contains static functions for converting an equation input string into 
+ * Reverse Polish Notation (RPN) and Normal Polish Notation (NPN). 
+ * @author Will
+ */
+public final class RPNConverter {
 	private static MathTokenizer tokenizer = new MathTokenizer();
 	
+	/**Converts the input string into an RPN ArrayList.
+	 * @param originalEquation The original equation (typically in infix notation).
+	 * @return An ArrayList containing the equations {@link Token}s re-ordered to post-fix notation.
+	 */
 	public static ArrayList<Token> convertToRPNlist(String originalEquation)
 	{
 		//Tokenize the original equation
@@ -81,6 +89,10 @@ public class RPNConverter {
 	
 	//////////////////////////
 	//THE WINNER
+	/**Converts the input string into an RPN Stack (to be read backwards).
+	 * @param originalEquation The original equation (typically in infix notation).
+	 * @return A Stack containing the equation's {@link Token}s re-ordered to post-fix notation
+	 */
 	public static Stack<Token> convertToRPNstack(String originalEquation)
 	{
 		//Tokenize the original equation
@@ -151,7 +163,11 @@ public class RPNConverter {
 	}
 	
 	
-	//Normal PolishNotation (PreFix)
+	//Normal PolishNotation (PreFix).
+	/**Converts the input string into an NPN Stack .
+	 * @param originalEquation The original equation (typically in infix notation).
+	 * @return A Stack containing the equations {@link Token}s re-ordered to pre-fix notation.
+	 */
 	public static Stack<Token> convertPN(String originalEquation)
 	{
 		//Tokenize the original equation
