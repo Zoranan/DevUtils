@@ -8,8 +8,8 @@ public class MultiplicationOperation extends BinaryOperation{
 	 * @param left  The left operand
 	 * @param right The right operand
 	 */
-	public MultiplicationOperation(AbstractOperation left, AbstractOperation right) {
-		super(left, right);
+	public MultiplicationOperation(AbstractOperation right, AbstractOperation left) {
+		super(right, left);
 	}
 
 	/**Evaluates the left and right operands, and multiplies them together

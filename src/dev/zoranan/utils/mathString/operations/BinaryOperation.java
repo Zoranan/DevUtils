@@ -14,9 +14,30 @@ public abstract class BinaryOperation extends AbstractOperation {
 	 * @param left	The left operand
 	 * @param right	The right operand
 	 */
-	public BinaryOperation(AbstractOperation left, AbstractOperation right)
+	public BinaryOperation(AbstractOperation right, AbstractOperation left)
 	{
 		this.left = left;
+		this.right = right;
+	}
+	
+	public BinaryOperation()
+	{
+		
+	}
+	
+	/**Set the left operand.
+	 * @param left The left side operand
+	 */
+	public void setLeft(AbstractOperation left)
+	{
+		this.left = left;
+	}
+	
+	/**Set the right operand.
+	 * @param right The right side operand
+	 */
+	public void setRight(AbstractOperation right)
+	{
 		this.right = right;
 	}
 	

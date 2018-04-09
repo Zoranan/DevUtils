@@ -43,8 +43,7 @@ public class XmlLoader {
 		{
 			out.output(doc, new FileOutputStream(path.toFile()));
 
-			//we need to reload the file after we write to it
-			doc = readXML(path, true);
+			//we need to store the new file after we write to it
 			xmlDocs.put(path.getFileName(), doc);
 		} 
 

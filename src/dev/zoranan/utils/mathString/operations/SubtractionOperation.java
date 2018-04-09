@@ -8,8 +8,8 @@ public class SubtractionOperation extends BinaryOperation{
 	 * @param left  The left operand
 	 * @param right The right operand
 	 */
-	public SubtractionOperation(AbstractOperation left, AbstractOperation right) {
-		super(left, right);
+	public SubtractionOperation(AbstractOperation right, AbstractOperation left) {
+		super(right, left);
 	}
 
 	/**Evaluates the left and right operands, and subtracts them.

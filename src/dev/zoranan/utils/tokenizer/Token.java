@@ -18,4 +18,14 @@ public class Token {
 		this.tokenContents = tokenContents;
 		this.tokenCode = tokenCode;
 	}
+	
+	/**Get the contents of this token.
+	 * @return The token's contents (String)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return this.tokenContents;
+	}
 }

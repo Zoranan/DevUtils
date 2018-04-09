@@ -7,13 +7,21 @@ import java.util.regex.Pattern;
 import jdk.nashorn.internal.runtime.ParserException;
 
 /**The Tokenizer class is used to process a String into Tokens.
+ * 
  * The {@link #add(String, int)} method is used to define Tokens.<br/>
  * The {@link #tokenize(String)} method splits the input string into its tokens 
  * @author Will
- *
+ * @see #tokenDefinitions
+ * @see #tokens
  */
 public class Tokenizer {
+	/**
+	 * This list holds all of the token definitions to be pulled from a line of text
+	 */
 	private LinkedList<TokenDefinition> tokenDefinitions;
+	/**
+	 * This list holds all of the tokens pulled from a line of text
+	 */
 	private LinkedList<Token> tokens;
 	
 	public Tokenizer()
@@ -78,7 +86,7 @@ public class Tokenizer {
 					
 					tokenContents = m.group().trim();
 					tokens.add(new Token(td.tokenCode, tokenContents));
-					System.out.println(tokenContents);
+					//System.out.println(tokenContents);
 					input = m.replaceFirst("");
 					input = input.trim();
 					break;
